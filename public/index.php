@@ -1,2 +1,5 @@
 <?php
-echo 'hello World';
+require_once '../app/boostrap.php';
+
+// Inite core Library
+$init = new Core();

@@ -9,3 +9,6 @@ define('APPROOT',dirname(dirname( __FILE__ ))) ;
 define('URLROOT','http://localhost/test') ;
 // Site Name
 define('SITENAME','MVC') ;
+
+//app version
+define('APPVERSION','1.0.0');

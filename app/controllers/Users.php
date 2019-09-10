@@ -1,5 +1,7 @@
 <?php
 class Users extends Controller {
+
+
     public function __construct()
     {
     $this->userModel = $this->model('User');
@@ -102,9 +104,15 @@ class Users extends Controller {
                 'email_err' => '',
                 'password_err' => ''
             ];
-//Validate Email
+//Validate Password
             if (empty($data['password'])){
                 $data['password_err'] = 'Please enter password';
+            }
+            //check for user/email
+            if($this->userModel->findUserByEmail($data['email'])){
+
+            }else {
+                $data['email_err'] = "No user found" ;
             }
             //Validate Email
             if (empty($data['email'])){
@@ -113,7 +121,16 @@ class Users extends Controller {
             //Make sure errors are empty
             if (empty($data['email_err'])&& empty($data['password_err'])){
                 // Validated
-                die('Success');
+              //Check and set logged in user
+                $loggedInUser = $this->userModel->login($data['email'],$data['password']) ;
+                if ($loggedInUser){
+                    //Create Session
+                    $this->createUserSession($loggedInUser);
+
+                }else {
+                    $data['password_err'] = 'password incorrect' ;
+                    $this->view('users/login',$data);
+                }
             }
             else{
                 //load view with errors
@@ -134,4 +151,18 @@ class Users extends Controller {
             $this->view('users/login',$data);
         }
     }
+    public function createUserSession($user){
+        $_SESSION['user_id'] = $user->id ;
+        $_SESSION['user_email'] = $user->email ;
+        $_SESSION['user_name'] = $user->name ;
+        redirect('posts');
+    }
+    public function logout(){
+        unset($_SESSION['id']);
+        unset($_SESSION['user_email']);
+        unset($_SESSION['user_name']);
+        session_destroy();
+        redirect('users/login');
+    }
+
 }

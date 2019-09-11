@@ -49,4 +49,13 @@ if (password_verify($password,$hashed_password)){
         }
     }
 
+    public function findUserByID($id){
+        $this->db->query('SELECT * FROM users WHERE id =:id');
+        $this->db->bind(':id',$id);
+
+        $row = $this->db->single() ;
+
+        return $row ;
+    }
+
 }

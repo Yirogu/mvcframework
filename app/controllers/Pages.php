@@ -6,7 +6,9 @@ class Pages extends Controller{
 
     }
     public function index(){
-
+        if (isLoggedIn()){
+            redirect('posts');
+        }
         $data = ['title' => 'Welcome',
         'description' => 'simple social betwor build on MVC'];
         $this->view('pages/index',$data);
